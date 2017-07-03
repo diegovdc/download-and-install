@@ -1,0 +1,27 @@
+{
+  "name": "switch_functor",
+  "version": "1.0.0",
+  "description": "An object that creates a switch that allows the exectution of one of multiple functions depending on the state of a external variable.",
+  "main": "switch.js",
+  "dependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.13.2",
+    "ramda": "^0.21.1"
+  },
+  "devDependencies": {
+    "babel-register": "^6.11.6",
+    "jasmine": "^2.4.1",
+    "nodemon": "^1.10.0"
+  },
+  "scripts": {
+    "test": "babel-node spec/run.js",
+    "build": "./node_modules/.bin/babel src --watch --out-dir build",
+    "nodemon": "./node_modules/.bin/nodemon build/switch.js"
+  },
+  "keywords": [
+    "javascript",
+    "switch"
+  ],
+  "author": "Diego Villaseñor",
+  "license": "ISC"
+}

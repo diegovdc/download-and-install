@@ -1,0 +1,20 @@
+{
+  "name": "download",
+  "version": "1.0.0",
+  "description": "",
+  "main": "download.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "now": "bin/download.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "coral-fs-tasks": "^1.0.1",
+    "data.task": "^3.1.1",
+    "download-git-repo": "^1.0.1",
+    "ramda": "^0.23.0"
+  }
+}
