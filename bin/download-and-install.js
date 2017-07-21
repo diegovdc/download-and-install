@@ -64,7 +64,7 @@ const installDependencies = tmp_package_json =>{
 
 const doCopy = ([from, to]) => 
 	 new Promise((resolve, reject) => 
-	 	copyfiles([from, to], {up: true, soft: true}, resolve))
+	 	copyfiles(['tmp/'+from, to], {up: true, soft: true}, resolve))
 
 
 const downloadAndInstall = (git_repo, from_to_paths_arr) => {
@@ -84,6 +84,6 @@ const downloadAndInstall = (git_repo, from_to_paths_arr) => {
 module.exports = downloadAndInstall
 
 // downloadAndInstall('flipxfx/download-git-repo-fixture', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
-// downloadAndInstall('diegovdc/mazorca', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
+downloadAndInstall('diegovdc/mazorca', [['core/**', 'core'],['foo/*', 'foo']])
 
 
