@@ -67,18 +67,20 @@ const doCopy = ([from, to]) =>
 	 	copyfiles([from, to], {up: true, soft: true}, resolve))
 
 
+const downloadAndInstall = (git_repo, from_to_paths_arr) => {
+	download(git_repo, 'tmp', function (err) {
+	 console.log(err ? ('Repo download Error', err) : 'Repo downloaded!')
+	 Promise.all(from_to_paths_arr.map(doCopy))
+	 .then(x => console.log('Archivos instaladas'))
+	 .then(x => readToBuffer(process.cwd()+'/tmp/package.json'))
+	 .then(JSON.parse)
+	 .then(tmp_package_json => installDependencies(tmp_package_json))
+	 .then(x => new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve)))
+	 .then(x => console.log('directorio temporal removido'))
+	 .catch(e =>console.log(e))
+	})	
+}
 
-download('diegovdc/mazorca', 'tmp', function (err) {
- console.log(err ? ('Repo download Error', err) : 'Repo downloaded!')
- Promise.all([
- 	doCopy(['tmp/core/**', 'core']),
- 	doCopy(['tmp/foo/*', 'foo']),
- ])
- .then(x => console.log('Archivos instaladas'))
- .then(x => readToBuffer(process.cwd()+'/tmp/package.json'))
- .then(JSON.parse)
- .then(tmp_package_json => installDependencies(tmp_package_json))
- .then(x => new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve)))
- .then(x => console.log('directorio temporal removido'))
- .catch(e =>console.log(e))
-})
+downloadAndInstall('diegovdc/mazorca', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
+
+
