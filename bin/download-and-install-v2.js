@@ -10,7 +10,7 @@ let tmp_package_json;
 const readToBuffer = path => 
 	new Promise((resolve, reject) => {
 		return fs.readFile(path,{encoding: 'utf8'}, (err, data) => 
-			err ? reject(err) : resolve(data)
+			err ? resolve("") : resolve(data)
 		)
 	})
 
@@ -73,14 +73,15 @@ const downloadAndInstall = (git_repo, from_to_paths_arr) => {
 	 Promise.all(from_to_paths_arr.map(doCopy))
 	 .then(x => console.log('Archivos instaladas'))
 	 .then(x => readToBuffer(process.cwd()+'/tmp/package.json'))
-	 .then(JSON.parse)
-	 .then(tmp_package_json => installDependencies(tmp_package_json))
+	 .then(x => x === "" ?  console.log('El repositorio no tiene package.json') : JSON.parse)
+	 .then(tmp_package_json => tmp_package_json === undefined ? undefined : installDependencies(tmp_package_json))
 	 .then(x => new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve)))
 	 .then(x => console.log('directorio temporal removido'))
 	 .catch(e =>console.log(e))
 	})	
 }
 
+downloadAndInstall('flipxfx/download-git-repo-fixture', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
 downloadAndInstall('diegovdc/mazorca', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
 
 
