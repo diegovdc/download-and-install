@@ -1,13 +1,10 @@
 {
-  "name": "download",
+  "name": "download-and-install",
   "version": "1.0.0",
   "description": "",
-  "main": "download.js",
+  "main": "download-and-install.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "bin": {
-    "now": "bin/download.js"
   },
   "author": "",
   "license": "ISC",
