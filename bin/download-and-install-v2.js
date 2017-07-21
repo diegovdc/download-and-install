@@ -68,17 +68,17 @@ const doCopy = ([from, to]) =>
 
 
 
-download('flipxfx/download-git-repo-fixture', 'tmp', function (err) {
+download('diegovdc/mazorca', 'tmp', function (err) {
  console.log(err ? ('Repo download Error', err) : 'Repo downloaded!')
  Promise.all([
  	doCopy(['tmp/core/**', 'core']),
  	doCopy(['tmp/foo/*', 'foo']),
  ])
  .then(x => console.log('Archivos instaladas'))
- // .then(x => readToBuffer(process.cwd()+'/tmp/package.json'))
- // .then(JSON.parse)
- // .then(tmp_package_json => Promise.resolve(installDependencies(tmp_package_json)))
- .then(Promise.resolve(new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve))))
+ .then(x => readToBuffer(process.cwd()+'/tmp/package.json'))
+ .then(JSON.parse)
+ .then(tmp_package_json => installDependencies(tmp_package_json))
+ .then(x => new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve)))
  .then(x => console.log('directorio temporal removido'))
  .catch(e =>console.log(e))
 })

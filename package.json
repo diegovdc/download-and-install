@@ -13,11 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "copyfiles": "^1.2.0",
-    "coral-fs-tasks": "^1.0.1",
-    "data.task": "^3.1.1",
     "download-git-repo": "^1.0.1",
     "ncp": "^2.0.0",
-    "ramda": "^0.23.0",
     "rimraf": "^2.6.1"
   }
 }
