@@ -81,7 +81,9 @@ const downloadAndInstall = (git_repo, from_to_paths_arr) => {
 	})	
 }
 
-downloadAndInstall('flipxfx/download-git-repo-fixture', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
-downloadAndInstall('diegovdc/mazorca', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
+module.exports = downloadAndInstall
+
+// downloadAndInstall('flipxfx/download-git-repo-fixture', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
+// downloadAndInstall('diegovdc/mazorca', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
 
 
