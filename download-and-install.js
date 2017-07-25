@@ -9,7 +9,7 @@ const R = require('ramda')
 const readToBuffer = path => 
 	new Promise((resolve, reject) => {
 		return fs.readFile(path,{encoding: 'utf8'}, (err, data) => 
-			err ? resolve("") : resolve(data)
+			err ? resolve("") : resolve(data)//we will not reject this, because we do not want to break the rest of the main Promise call, we handle the empty string in later in the main Promise
 		)
 	})
 
@@ -79,9 +79,7 @@ const doCopy = ([from, to]) =>
 //downloaded_pkg_json_dependencies: [''] - Installs no dependencies
 //downloaded_pkg_json_dependencies: ['dependency_name'] - Installs selected dependencies
 const downloadAndInstall = (git_repo, from_to_paths_arr, downloaded_pkg_json_dependencies, fn) => {
-	if (typeof fn !== 'function') {
-		console.error('[download-and-install] A callback function is required as the last argument');
-	}
+	if (typeof fn !== 'function') { console.error('[download-and-install] A callback function is required as the last argument'); return}
 	download(git_repo, 'tmp', function (err) {
 	 console.log(err ? ('Repo download Error', err) : 'Repo downloaded!')
 	 Promise.all(from_to_paths_arr.map(doCopy))
@@ -95,6 +93,7 @@ const downloadAndInstall = (git_repo, from_to_paths_arr, downloaded_pkg_json_dep
 	 .catch(e =>console.log(e))
 	})	
 }
+
 
 module.exports = downloadAndInstall
 
