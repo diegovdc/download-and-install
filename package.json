@@ -1,6 +1,6 @@
 {
   "name": "download-and-install",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Download a Github repo, copy an array of files to a folder in the cwd and install the dependencies of the package.json from the repository",
   "main": "download-and-install.js",
   "scripts": {
