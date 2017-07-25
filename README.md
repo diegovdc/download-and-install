@@ -1,4 +1,4 @@
-# Download and Install
+# download-and-install
 
 Este módulo descarga un repositorio de Github. El repositorio puede tener un package.json cuyas dependencias se desean instalar, sin sobreescribir alguna dependencia que tenga una versión diferente de aquella con la que cuenta el package.json del proyecto.
 
@@ -14,8 +14,12 @@ const downloadAndInstall = require('download-and-install')
 // Third argument: an array of package.json dependencies that we wish to install (pass [], to install all, and [''] to not install any of them)
 // Fourth is a callback function
 // All arguments are required
-downloadAndInstall('diegovdc/coral-mongo-tasks', [['specs/**', 'specs']], ['data.task'], () => console.log('all done'))
-
+let all_options = {
+	as_dev_dependencies: false,// default
+	from_dev_dependencies: false// default
+}
+downloadAndInstall('diegovdc/coral-mongo-tasks', [['specs/**', 'specs']], ['data.task'],all_options () => console.log('all done'))
 ```
+
 
 
