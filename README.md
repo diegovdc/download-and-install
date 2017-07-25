@@ -9,8 +9,12 @@ Este módulo descarga un repositorio de Github. El repositorio puede tener un pa
 ```
 const downloadAndInstall = require('download-and-install')
 
-//first arguement is the git repo, the second an array of pairs, the first is glob that specifies the path inside the repo, the second a path to where the file or files are going to be copied
-downloadAndInstall('diegovdc/mazorca', [['core/**', 'core'],['foo/*', 'foo']])
+// First arguement: the git repo, 
+// Second argument: an array of pairs, the first is glob that specifies the path inside the repo, the second a path to where the file or files are going to be copied
+// Third argument: an array of package.json dependencies that we wish to install (pass [], to install all, and [''] to not install any of them)
+// Fourth is a callback function
+// All arguments are required
+downloadAndInstall('diegovdc/coral-mongo-tasks', [['specs/**', 'specs']], ['data.task'], () => console.log('all done'))
 
 ```
 
