@@ -12,6 +12,7 @@
     "copyfiles": "^1.2.0",
     "download-git-repo": "^1.0.1",
     "ncp": "^2.0.0",
+    "ramda": "^0.24.1",
     "rimraf": "^2.6.1"
   }
 }

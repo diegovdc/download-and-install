@@ -1,11 +1,10 @@
 #! /usr/bin/env node
 const download = require('download-git-repo')
-const copyfiles = require('copyfiles');
+const copyfiles = require('copyfiles')
 const rimraf = require('rimraf')
 const fs = require('fs')
 const child_process = require('child_process')
-
-let tmp_package_json;
+const R = require('ramda')
 
 const readToBuffer = path => 
 	new Promise((resolve, reject) => {
@@ -14,20 +13,21 @@ const readToBuffer = path =>
 		)
 	})
 
-
-const installDependencies = tmp_package_json =>{
+// :: {dependencies: {}, *} -> ['dependency_name'] -> Promise Npm Installed Dependencies || 'Error'
+const installDependencies = (tmp_package_json, dependencies_to_install) =>{
 	readToBuffer(process.cwd()+'/package.json')//el package json del proyecto actual
 	.then(JSON.parse)
 	.then(pkg => {
+		let dependencies = tmp_package_json.dependencies
 		let to_install = []
 		let installed_with_other_version = []
-		for(dep in tmp_package_json.dependencies) {
+		for(let dep in dependencies) {
 			if (pkg.dependencies[dep] === undefined) {//no instalada
-				let version = tmp_package_json.dependencies[dep]
+				let version = dependencies[dep]
 				to_install.push(dep+'@'+version)
-			} else if(tmp_package_json.dependencies[dep] !== pkg.dependencies[dep]) {//instalda con otra version
-				installed_with_other_version.push([dep, tmp_package_json.dependencies[dep], pkg.dependencies[dep]])
-			} else if(tmp_package_json.dependencies[dep] === pkg.dependencies[dep]) {//instalda con la misma version
+			} else if(dependencies[dep] !== pkg.dependencies[dep]) {//instalda con otra version
+				installed_with_other_version.push([dep, dependencies[dep], pkg.dependencies[dep]])
+			} else if(dependencies[dep] === pkg.dependencies[dep]) {//instalda con la misma version
 				//do nothing
 			}
 		}
@@ -59,7 +59,6 @@ const installDependencies = tmp_package_json =>{
 		})
 	})
 	.catch(e => console.log(e))
-
 }
 
 const doCopy = ([from, to]) => 
@@ -67,16 +66,22 @@ const doCopy = ([from, to]) =>
 	 	copyfiles(['tmp/'+from, to], {up: true, soft: true}, resolve))
 
 
-const downloadAndInstall = (git_repo, from_to_paths_arr) => {
+
+// downloadAndInstall :: 'git/repo' -> [['from/**', 'to']] -> ['downloaded_pkg_json_dependency']
+//downloaded_pkg_json_dependencies: [] - Installs all dependencies
+//downloaded_pkg_json_dependencies: [''] - Installs no dependencies
+//downloaded_pkg_json_dependencies: ['dependency_name'] - Installs selected dependencies
+const downloadAndInstall = (git_repo, from_to_paths_arr, downloaded_pkg_json_dependencies, fn) => {
 	download(git_repo, 'tmp', function (err) {
 	 console.log(err ? ('Repo download Error', err) : 'Repo downloaded!')
 	 Promise.all(from_to_paths_arr.map(doCopy))
-	 .then(x => console.log('Archivos instaladas'))
-	 .then(x => readToBuffer(process.cwd()+'/tmp/package.json'))
+	 .then(_ => console.log('Archivos instaladas'))
+	 .then(_ => readToBuffer(process.cwd()+'/tmp/package.json'))
 	 .then(x => x === "" ?  console.log('El repositorio no tiene package.json') : JSON.parse)
-	 .then(tmp_package_json => tmp_package_json === undefined ? undefined : installDependencies(tmp_package_json))
-	 .then(x => new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve)))
-	 .then(x => console.log('directorio temporal removido'))
+	 .then(tmp_package_json => tmp_package_json === undefined ? undefined : installDependencies(tmp_package_json, downloaded_pkg_json_dependencies))
+	 .then(_ => new Promise((resolve, reject) => rimraf(process.cwd()+'/tmp', resolve)))
+	 .then(_ => console.log('directorio temporal removido'))
+	 .then(fn)
 	 .catch(e =>console.log(e))
 	})	
 }
@@ -84,6 +89,6 @@ const downloadAndInstall = (git_repo, from_to_paths_arr) => {
 module.exports = downloadAndInstall
 
 // downloadAndInstall('flipxfx/download-git-repo-fixture', [['tmp/core/**', 'core'],['tmp/foo/*', 'foo']])
-downloadAndInstall('diegovdc/mazorca', [['core/**', 'core'],['foo/*', 'foo']])
+downloadAndInstall('diegovdc/mazorca', [['core/**', 'core'],['foo/*', 'foo']], [''], () => console.log('woohooo'))
 
 
