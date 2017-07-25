@@ -29,6 +29,9 @@ const installDependencies = (tmp_package_json, dependencies_to_install, {from_de
 			? tmp_package_json[dependency_type]
 			: R.pick(dependencies_to_install, tmp_package_json[dependency_type])// si recive [''], entonces devuelve un objeto
 		
+		if (pkg[target_dependency_type] === undefined) {
+			pkg[target_dependency_type]	= {}
+		}
 		for(let dep in dependencies) {//TODO refactorizar en FP
 			if (pkg[target_dependency_type][dep] === undefined) {//no instalada
 				let version = dependencies[dep]
@@ -72,7 +75,7 @@ const installDependencies = (tmp_package_json, dependencies_to_install, {from_de
 
 const doCopy = ([from, to]) => 
 	 new Promise((resolve, reject) => 
-	 	copyfiles(['tmp/'+from, to], {up: true, soft: true}, resolve))
+	 	copyfiles(['tmp/'+from, to], {up: 1, soft: true}, resolve))
 
 
 
